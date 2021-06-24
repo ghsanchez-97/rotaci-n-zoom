@@ -1,11 +1,17 @@
 import React from "react";
 import "./App.css";
 import src from "./iden.jpeg";
-import { BiRotateLeft, BiRotateRight } from "react-icons/bi";
+import {
+  BiRotateLeft,
+  BiRotateRight,
+  // BiZoomIn,
+  // BiZoomOut,
+} from "react-icons/bi";
 
 function App() {
   const [rotats, setRotats] = React.useState(0);
   const [image, setImage] = React.useState();
+  const [zoomInOut, setZoomInOut] = React.useState(1);
   const [isPanning, setPanning] = React.useState(false);
   const [position, setPosition] = React.useState({
     oldX: 0,
@@ -16,6 +22,7 @@ function App() {
   });
 
   const containerRef = React.useRef();
+  const ref = React.useRef(null);
 
   const onLoad = (e) => {
     setImage({
@@ -43,20 +50,23 @@ function App() {
       setPosition({
         ...position,
         x: position.x * scal - (rect.width / 2 - e.clientX + rect.x) * sign,
-        y: position.y * scal - (image.height * rect.width / image.width / 2 - e.clientY + rect.y) * sign,
+        y:
+          position.y * scal -
+          ((image.height * rect.width) / image.width / 2 - e.clientY + rect.y) *
+            sign,
         z: position.z * scal,
       });
     }
   };
 
-  // const rotates = () => {
-  //   document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
-  // };
+  React.useEffect(() => {
+    ref.current.style.transform = `scale(${zoomInOut})`;
+  }, [zoomInOut]);
 
   React.useEffect(() => {
     const rotates = () => {
       document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
-    }
+    };
     rotates();
   }, [rotats]);
 
@@ -84,7 +94,7 @@ function App() {
       window.removeEventListener("mouseup", mouseup);
       window.removeEventListener("mousemove", mousemove);
     };
-  })
+  });
 
   return (
     <div className="App">
@@ -107,6 +117,14 @@ function App() {
                 <BiRotateRight className="text-3xl" />
               </button>
             </div>
+            <input
+              type="range"
+              value={zoomInOut}
+              min={1}
+              max={5}
+              step={0.1}
+              onChange={(e) => setZoomInOut(e.target.value)}
+            />
           </div>
         </div>
       </div>
@@ -123,6 +141,7 @@ function App() {
           }}
         >
           <img
+            ref={ref}
             src={src}
             alt="Prueba"
             className="rotates mb-4 w-2/4 PanAndZoomImage-image"
