@@ -1,13 +1,9 @@
 import React from "react";
 import "./App.css";
 import src from "./iden.jpeg";
-//import Magnifier from "react-magnifier";
-//import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 import { BiRotateLeft, BiRotateRight } from "react-icons/bi";
 
 function App() {
-  //const imgRef = React.useRef();
-  //const [rotate, setRotate] = React.useState(0);
   const [rotats, setRotats] = React.useState(0);
   const [image, setImage] = React.useState();
   const [isPanning, setPanning] = React.useState(false);
@@ -53,17 +49,18 @@ function App() {
     }
   };
 
-  const rotates = () => {
-    console.log("giro a la izquierda");
-    //const left = setRotateLeft(-90)
-
-    //   //imgRef.style.webkitTransform = `rotate(${rotate}deg)`
-    document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
-    console.log("Angulo", rotats);
-  };
+  // const rotates = () => {
+  //   document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
+  // };
 
   React.useEffect(() => {
+    const rotates = () => {
+      document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
+    }
     rotates();
+  }, [rotats]);
+
+  React.useEffect(() => {
     const mouseup = () => {
       setPanning(false);
     };
@@ -87,11 +84,12 @@ function App() {
       window.removeEventListener("mouseup", mouseup);
       window.removeEventListener("mousemove", mousemove);
     };
-  }, [rotats]);
+  })
 
   return (
     <div className="App">
       <h1 className="text-7xl">Hello Zoom</h1>
+
       <div className="bg-red-500 my-4">
         <div className="flex justify-center">
           <div>
@@ -117,7 +115,7 @@ function App() {
         ref={containerRef}
         onMouseDown={onMouseDown}
         onWheel={onWheel}
-        className="PanAndZoomImage-container"
+        className="PanAndZoomImage-container flex"
       >
         <div
           style={{
