@@ -7,10 +7,13 @@ import {
   // BiZoomIn,
   // BiZoomOut,
 } from "react-icons/bi";
+import Lightbox from "react-awesome-lightbox";
+import "react-awesome-lightbox/build/style.css";
 
 function App() {
   const [rotats, setRotats] = React.useState(0);
   const [image, setImage] = React.useState();
+  const [visible, setVisible] = React.useState(false)
   const [zoomInOut, setZoomInOut] = React.useState(1);
   const [isPanning, setPanning] = React.useState(false);
   const [position, setPosition] = React.useState({
@@ -65,7 +68,9 @@ function App() {
 
   React.useEffect(() => {
     const rotates = () => {
-      document.querySelector(".rotates").style.transform = `rotate(${rotats}deg)`;
+      document.querySelector(
+        ".rotates"
+      ).style.transform = `rotate(${rotats}deg)`;
     };
     rotates();
   }, [rotats]);
@@ -148,6 +153,14 @@ function App() {
             onLoad={onLoad}
           />
         </div>
+      </div>
+
+      <div className='bg-yellow-500 text-white'>
+        <button onClick={() => setVisible(true)} className='py-4 bg-white text-black px-4 my-4'>Show</button>
+        {visible === true ?
+          <Lightbox image={src} onClose={() => setVisible(false)}/>
+          :null
+        }
       </div>
     </div>
   );
